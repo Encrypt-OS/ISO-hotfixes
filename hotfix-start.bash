@@ -5,7 +5,7 @@
 
 Main() {
     local progname=$(basename "$0")
-    source /usr/share/endeavouros/scripts/eos-script-lib-yad || return 1
+    source /usr/share/encryptos/scripts/eos-script-lib-yad || return 1
     local ISO_VERSION="$(IsoVersion)"
     local DE="$(eos_GetDeOrWm)"
 
@@ -85,7 +85,7 @@ Atlantis_neo_fix() {
 Atlantis_fix_update-mirrorlist() {
     if [ "$(PackageVersion calamares_current)" = "3.2.47-5" ] ; then
         if eos-connection-checker ; then
-            local remote="$(eos-github2gitlab "https://github.com/endeavouros-team/EndeavourOS-calamares/raw/main/calamares/scripts/update-mirrorlist")"
+            local remote="$(eos-github2gitlab "https://github.com/encryptos-team/encryptos-calamares/raw/main/calamares/scripts/update-mirrorlist")"
             local local="/etc/calamares/scripts/update-mirrorlist"
             FetchFile "$remote" "$local"
         else
@@ -102,7 +102,7 @@ Atlantis_fix_installer_start() {
              -e 's|workdir 2>/dev/null|workdir >/dev/null|' \
              -e 's|popd 2>/dev/null|popd >/dev/null|'
 
-        local icon==/usr/share/endeavouros/EndeavourOS-icon.png
+        local icon==/usr/share/encryptos/encryptos-icon.png
         local txt=""
         txt+="Currently the <b>Atlantis</b> release requires clicking the install button a second time\n"
         txt+="in order to actually start the install process.\n\n"
@@ -124,7 +124,7 @@ HotMsg() {
 
 IsoVersion() {
     local VERSION=""
-    local file=/usr/lib/endeavouros-release
+    local file=/usr/lib/encryptos-release
     LANG=C source $file || return
     echo "$VERSION"
 }

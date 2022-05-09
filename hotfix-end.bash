@@ -5,7 +5,7 @@
 
 Main() {
     local progname="$(basename "$0")"
-    source /usr/share/endeavouros/scripts/eos-script-lib-yad || return 1
+    source /usr/share/encryptos/scripts/eos-script-lib-yad || return 1
     local ISO_VERSION="$(IsoVersion)"
     local DE="$(eos_GetDeOrWm)"
 
@@ -50,7 +50,7 @@ HotMsg() {
 
 IsoVersion() {
     local VERSION=""
-    local file=/usr/lib/endeavouros-release
+    local file=/usr/lib/encryptos-release
     LANG=C source $file || return
     echo "$VERSION"
 }
