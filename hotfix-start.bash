@@ -29,8 +29,9 @@ Main() {
             # remove pcurses
             sed -i /etc/calamares/modules/netinstall.yaml                  -e '/pcurses$/d'
             sed -i /etc/calamares/modules/netinstall-ce-base.yaml          -e '/pcurses$/d'
+            # should use: SkipPackageInstall pcurses
             ;;
-        2022.04.08)  # Apollo
+        2022.07.16)  # Margherita Pizza 
             HotMsg "hotfixes after ISO $ISO_VERSION"
 
             HotMsg "remove the uninstalling of qt6-base (in offline install) because eos-quickstart needs it"
@@ -43,6 +44,9 @@ Main() {
                 sed -i /etc/calamares/modules/shellprocess_initialize_pacman.conf \
                     -e '/^script:$/a \ - command: "pacman -Sy --needed --noconfirm archlinux-keyring"\n   timeout: 1200'
             fi
+
+            # package pipewire-media-session is no more available officially
+            SkipPackageInstall pipewire-media-session
             ;;
         "")
             HotMsg "ISO version not found." warning
@@ -85,7 +89,7 @@ Atlantis_neo_fix() {
 Atlantis_fix_update-mirrorlist() {
     if [ "$(PackageVersion calamares_current)" = "3.2.47-5" ] ; then
         if eos-connection-checker ; then
-            local remote="$(eos-github2gitlab "https://github.com/encryptos-team/encryptos-calamares/raw/main/calamares/scripts/update-mirrorlist")"
+            local remote="$(eos-github2gitlab "https://github.com/Encrypt-OS/EncryptOS-calamares/raw/main/calamares/scripts/update-mirrorlist")"
             local local="/etc/calamares/scripts/update-mirrorlist"
             FetchFile "$remote" "$local"
         else
@@ -102,7 +106,7 @@ Atlantis_fix_installer_start() {
              -e 's|workdir 2>/dev/null|workdir >/dev/null|' \
              -e 's|popd 2>/dev/null|popd >/dev/null|'
 
-        local icon==/usr/share/encryptos/encryptos-icon.png
+        local icon==/usr/share/encryptos/EncryptOS-icon.png
         local txt=""
         txt+="Currently the <b>Atlantis</b> release requires clicking the install button a second time\n"
         txt+="in order to actually start the install process.\n\n"
@@ -159,6 +163,15 @@ Update_packages() {  # parameters: package names
     fi
 }
 
+SkipPackageInstall() {
+    # remove given packages from the list of packages to be installed
+    HotMsg "skip installing package(s): $*"
+    local pkg
+    for pkg in "$@" ; do
+        sed -i /etc/calamares/modules/netinstall.yaml          -e "/^[ \t]*-[ ]*$pkg$/d"
+        sed -i /etc/calamares/modules/netinstall-ce-base.yaml  -e "/^[ \t]*-[ ]*$pkg$/d"
+    done
+}
+
 #### Execution starts here
 Main "$@"
-
