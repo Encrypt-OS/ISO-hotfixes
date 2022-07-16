@@ -20,6 +20,13 @@ Main() {
             Hotfix_sway_ly
             Remove_packages pcurses
             ;;
+        2022.04.08)
+            HotMsg "hotfixes after ISO $ISO_VERSION."
+            Install_packages encryptos-keyring
+            if [ -n "$(lspci -k | grep "Ethernet controller: Marvell Technology" | grep -w "wireless")" ] ; then
+                Install_packages linux-firmware-marvell
+            fi
+            ;;
         "")
             HotMsg "ISO version not found." warning
             ;;
@@ -94,4 +101,3 @@ Remove_packages() {  # parameters: package names
 
 #### Execution starts here
 Main "$@"
-
